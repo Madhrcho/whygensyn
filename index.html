@@ -1,192 +1,415 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Why Gensyn? - Machine Intelligence Network</title>
-<style>
-  /* Base Styles */
-  body {
-    margin: 0;
-    font-family: 'Courier New', Courier, monospace;
-    background: #5c3a21 url('https://gensyn.ai/favicon.ico') repeat; /* repeating logo */
-    color: white;
-    overflow-x: hidden;
+// This is the complete Next.js project code in a single response. Copy-paste into your project.
+// Create a new Next.js project with: npx create-next-app@latest gensyn-clone --typescript --tailwind --eslint --app --src-dir --import-alias "@/*"
+// Then install: npm install framer-motion chart.js react-chartjs-2 next-mdx-remote @next/mdx react-hook-form @hookform/resolvers yup
+// Replace files as below.
+
+// package.json
+{
+  "name": "gensyn-clone",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^3.3.2",
+    "@next/mdx": "^14.0.4",
+    "chart.js": "^4.4.0",
+    "framer-motion": "^10.16.16",
+    "next": "14.0.4",
+    "next-mdx-remote": "^4.4.1",
+    "react": "^18",
+    "react-chartjs-2": "^5.2.0",
+    "react-dom": "^18",
+    "react-hook-form": "^7.48.2",
+    "yup": "^1.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8",
+    "eslint-config-next": "14.0.4",
+    "postcss": "^8.4.32",
+    "tailwindcss": "^3.3.6",
+    "typescript": "^5"
   }
+}
 
-  header {
-    text-align: center;
-    padding: 30px 20px;
-    background: rgba(92, 58, 33, 0.9);
-    position: relative;
-    overflow: hidden;
-  }
+// next.config.mjs
+import mdx from '@next/mdx'
 
-  header h1 {
-    font-size: 3em;
-    margin: 0;
-    animation: glitch 1.5s infinite;
-    color: #fff;
-  }
+const withMDX = mdx({
+  extension: /\.mdx?$/,
+  options: {
+    remarkPlugins: [],
+    rehypePlugins: [],
+  },
+})
 
-  header p {
-    font-size: 1.2em;
-    margin-top: 10px;
-    color: #fff;
-    animation: glitch 1.5s infinite;
-  }
+export default withMDX({
+  pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
+})
 
-  section {
-    background: rgba(92, 58, 33, 0.85);
-    margin: 20px auto;
-    padding: 20px;
-    border-radius: 8px;
-    max-width: 1000px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
-  }
+// tailwind.config.js
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    './pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './components/**/*.{js,ts,jsx,tsx,mdx}',
+    './app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+      },
+      colors: {
+        primary: '#007bff',
+        secondary: '#6c757d',
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.5s ease-in-out',
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+      },
+    },
+  },
+  plugins: [],
+}
 
-  h2 {
-    color: #ffebcd;
-  }
+// app/layout.tsx
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import './globals.css'
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
 
-  ul {
-    list-style-type: disc;
-    margin-left: 20px;
-  }
+const inter = Inter({ subsets: ['latin'] })
 
-  #threejs-container {
-    width: 100%;
-    height: 400px;
-    border-radius: 8px;
-    overflow: hidden;
-    margin-top: 20px;
-  }
+export const metadata: Metadata = {
+  title: 'Gensyn - The Network for Machine Intelligence',
+  description: 'Decentralized AI network connecting devices for open machine learning.',
+  openGraph: {
+    title: 'Gensyn',
+    description: 'The Network for Machine Intelligence',
+    images: ['/og-image.png'],
+  },
+}
 
-  footer {
-    text-align: center;
-    padding: 20px;
-    background: rgba(92, 58, 33, 0.9);
-    font-size: 0.9em;
-    color: #fff;
-  }
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="en">
+      <body className={inter.className}>
+        <Header />
+        {children}
+        <Footer />
+      </body>
+    </html>
+  )
+}
 
-  /* Glitch animation */
-  @keyframes glitch {
-    0% { text-shadow: 2px 0 red; }
-    10% { text-shadow: -2px 0 blue; }
-    20% { text-shadow: 2px 2px cyan; }
-    30% { text-shadow: -2px -2px lime; }
-    40% { text-shadow: 2px -2px magenta; }
-    50% { text-shadow: -2px 2px yellow; }
-    60% { text-shadow: 2px 0 red; }
-    70% { text-shadow: -2px 0 blue; }
-    80% { text-shadow: 2px 2px cyan; }
-    90% { text-shadow: -2px -2px lime; }
-    100% { text-shadow: 2px -2px magenta; }
-  }
+// app/globals.css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  a { color: #ffebcd; text-decoration: underline; }
-</style>
-</head>
-<body>
+body {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+}
 
-<header>
-  <h1>Gensyn</h1>
-  <p>The Network for Machine Intelligence</p>
-</header>
+// app/page.tsx
+import Hero from '@/components/Hero'
 
-<section id="introduction">
-  <h2>What is Gensyn?</h2>
-  <p>Gensyn is a decentralized network designed to foster machine intelligence alongside human intelligence. It connects devices worldwide into an open, permissionless, and neutral system for AI development. Inspired by nature, it enables AI to compress and share knowledge without gatekeepers, making it scalable to every computer globally.</p>
-</section>
+export default function Home() {
+  return (
+    <main className="min-h-screen">
+      <Hero />
+    </main>
+  )
+}
 
-<section id="why-needed">
-  <h2>Why is Gensyn Needed?</h2>
-  <ul>
-    <li><strong>Privacy Risks:</strong> Your data often goes to external companies.</li>
-    <li><strong>High Costs:</strong> Training AI requires massive hardware.</li>
-    <li><strong>Limited Access:</strong> Only a few control AI.</li>
-    <li><strong>Scalability Challenges:</strong> Global AI scaling is hard.</li>
-  </ul>
-</section>
+// components/Header.tsx
+'use client'
+import Link from 'next/link'
+import { motion } from 'framer-motion'
 
-<section id="benefits">
-  <h2>Benefits for Users</h2>
-  <ul>
-    <li><strong>Everyday Users:</strong> Train AI locally with BlockAssist.</li>
-    <li><strong>Developers:</strong> Integrate AI into apps collaboratively.</li>
-    <li><strong>ML Researchers:</strong> Deploy swarms and explore decentralized AI.</li>
-    <li><strong>All Users:</strong> Enhanced privacy, lower costs, fairer AI.</li>
-  </ul>
-</section>
+export default function Header() {
+  return (
+    <motion.nav
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      className="sticky top-0 z-50 bg-white/80 backdrop-blur-md shadow-sm"
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16">
+          <div className="flex items-center">
+            <Link href="/" className="text-2xl font-bold text-primary">
+              Gensyn
+            </Link>
+          </div>
+          <div className="flex space-x-8">
+            {['Home', 'Docs', 'Blog', 'Dashboard', 'Careers'].map((item) => (
+              <Link
+                key={item}
+                href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
+                className="text-gray-700 hover:text-primary transition-colors"
+              >
+                {item}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+    </motion.nav>
+  )
+}
 
-<section id="how-it-works">
-  <h2>How Does It Work?</h2>
-  <ul>
-    <li><strong>RL Swarm:</strong> Collaborative AI training over the internet.</li>
-    <li><strong>Judge & Verde:</strong> Trustless verification ensuring reproducibility.</li>
-    <li><strong>Communication Tools:</strong> NoLoCo & SkipPipe for distributed training.</li>
-  </ul>
-</section>
+// components/Hero.tsx
+'use client'
+import { motion } from 'framer-motion'
+import Link from 'next/link'
 
-<section id="visualization">
-  <h2>Interactive Visualization: Gensyn Network</h2>
-  <div id="threejs-container"></div>
-</section>
+export default function Hero() {
+  return (
+    <section className="relative bg-gradient-to-r from-blue-500 to-purple-600 text-white py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-5xl font-bold mb-4"
+        >
+          The Network for Machine Intelligence
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="text-xl mb-8"
+        >
+          Connecting devices worldwide for open, decentralized AI.
+        </motion.p>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="space-x-4"
+        >
+          <Link
+            href="/dashboard"
+            className="bg-white text-primary px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition"
+          >
+            Join Testnet
+          </Link>
+          <Link
+            href="/docs"
+            className="border border-white text-white px-6 py-3 rounded-full font-semibold hover:bg-white hover:text-primary transition"
+          >
+            Learn More
+          </Link>
+        </motion.div>
+      </div>
+    </section>
+  )
+}
 
-<footer>
-  &copy; 2025 Gensyn. Visit the <a href="https://gensyn.ai" target="_blank">official website</a> for more.
-</footer>
+// components/Footer.tsx
+import Link from 'next/link'
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script>
-  // Three.js scene
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / 400, 0.1, 1000);
-  const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(window.innerWidth, 400);
-  document.getElementById('threejs-container').appendChild(renderer.domElement);
+export default function Footer() {
+  return (
+    <footer className="bg-gray-800 text-white py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Gensyn</h3>
+            <p>The future of decentralized AI.</p>
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Links</h3>
+            <ul className="space-y-2">
+              <li><Link href="/docs" className="hover:text-primary">Docs</Link></li>
+              <li><Link href="/blog" className="hover:text-primary">Blog</Link></li>
+              <li><Link href="/careers" className="hover:text-primary">Careers</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Connect</h3>
+            <div className="flex space-x-4">
+              <a href="#" className="hover:text-primary">GitHub</a>
+              <a href="#" className="hover:text-primary">Twitter</a>
+              <a href="#" className="hover:text-primary">Discord</a>
+            </div>
+            <p className="mt-4 text-sm">
+              <Link href="/privacy" className="hover:text-primary">Privacy Policy</Link> | 
+              <Link href="/contact" className="hover:text-primary">Contact</Link>
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+  )
+}
 
-  // Nodes (devices)
-  const geometry = new THREE.SphereGeometry(0.15, 32, 32);
-  const material = new THREE.MeshBasicMaterial({ color: 0xffebcd });
-  const nodes = [];
-  for (let i = 0; i < 20; i++) {
-    const node = new THREE.Mesh(geometry, material);
-    node.position.set((Math.random()-0.5)*10, (Math.random()-0.5)*10, (Math.random()-0.5)*10);
-    scene.add(node);
-    nodes.push(node);
-  }
+// app/(pages)/docs/page.tsx
+import Link from 'next/link'
 
-  // Lines
-  const lineMaterial = new THREE.LineBasicMaterial({ color: 0x8b4513, opacity: 0.5, transparent: true });
-  for (let i=0; i<nodes.length; i++){
-    for(let j=i+1; j<nodes.length; j++){
-      const points = [nodes[i].position, nodes[j].position];
-      const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
-      const line = new THREE.Line(lineGeometry, lineMaterial);
-      scene.add(line);
-    }
-  }
+export default function Docs() {
+  const docs = ['getting-started', 'api-reference']
 
-  camera.position.z = 12;
+  return (
+    <div className="max-w-4xl mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-8">Documentation</h1>
+      <ul className="space-y-4">
+        {docs.map((doc) => (
+          <li key={doc}>
+            <Link href={`/docs/${doc}`} className="text-primary hover:underline">
+              {doc.replace('-', ' ').toUpperCase()}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
 
-  function animate(){
-    requestAnimationFrame(animate);
-    nodes.forEach(n=>{
-      n.rotation.x += 0.01;
-      n.rotation.y += 0.01;
-    });
-    renderer.render(scene, camera);
-  }
-  animate();
+// app/(pages)/docs/[slug]/page.tsx
+import { getMDXContent } from '@/lib/mdx'
 
-  window.addEventListener('resize', ()=>{
-    camera.aspect = window.innerWidth / 400;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, 400);
-  });
-</script>
+export default async function DocPage({ params }: { params: { slug: string } }) {
+  const { content } = await getMDXContent(`docs/${params.slug}`)
 
-</body>
-</html>
+  return (
+    <div className="max-w-4xl mx-auto px-4 py-8 prose">
+      {content}
+    </div>
+  )
+}
+
+// lib/mdx.ts
+import { compileMDX } from 'next-mdx-remote/rsc'
+import fs from 'fs'
+import path from 'path'
+
+export async function getMDXContent(slug: string) {
+  const filePath = path.join(process.cwd(), 'content', `${slug}.mdx`)
+  const source = fs.readFileSync(filePath, 'utf-8')
+  const { content } = await compileMDX({ source, options: { parseFrontmatter: true } })
+  return { content }
+}
+
+// content/docs/getting-started.mdx
+# Getting Started with Gensyn
+
+Welcome to Gensyn! This guide will help you get started.
+
+## Installation
+
+Run `npm install gensyn-sdk` to begin.
+
+// app/(pages)/blog/page.tsx (Similar to Docs, create your own MDX files)
+
+// app/(pages)/dashboard/page.tsx
+'use client'
+import { useEffect, useState } from 'react'
+import { Line } from 'react-chartjs-2'
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js'
+
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
+
+export default function Dashboard() {
+  const [data, setData] = useState<any>(null)
+
+  useEffect(() => {
+    setData({
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+      datasets: [{
+        label: 'Participation',
+        data: [10, 20, 30, 40, 50],
+        borderColor: 'rgb(75, 192, 192)',
+        tension: 0.1
+      }]
+    })
+  }, [])
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
+      {data && <Line data={data} />}
+    </div>
+  )
+}
+
+// app/(pages)/careers/page.tsx
+'use client'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+import JobListing from '@/components/JobListing'
+
+const schema = yup.object({
+  name: yup.string().required(),
+  email: yup.string().email().required(),
+  position: yup.string().required(),
+})
+
+export default function Careers() {
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: yupResolver(schema)
+  })
+
+  const onSubmit = (data: any) => alert('Application submitted!')
+
+  return (
+    <div className="max-w-4xl mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-8">Careers</h1>
+      <JobListing title="AI Engineer" description="Build decentralized AI systems." />
+      <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-4">
+        <input {...register('name')} placeholder="Name" className="w-full p-2 border rounded" />
+        {errors.name && <p className="text-red-500">{errors.name.message}</p>}
+        <input {...register('email')} placeholder="Email" className="w-full p-2 border rounded" />
+        <select {...register('position')} className="w-full p-2 border rounded">
+          <option>AI Engineer</option>
+        </select>
+        <button type="submit" className="bg-primary text-white px-4 py-2 rounded">Apply</button>
+      </form>
+    </div>
+  )
+}
+
+// components/JobListing.tsx
+export default function JobListing({ title, description }: { title: string; description: string }) {
+  return (
+    <div className="border rounded p-4 mb-4">
+      <h3 className="text-xl font-semibold">{title}</h3>
+      <p>{description}</p>
+    </div>
+  )
+}
+
+// vercel.json
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next"
+}
+
+// netlify.toml
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+// Add og-image.png to public/, and create content/blog/ and content/docs/ with MDX files.
+// Run npm run dev to test. Deploy to Vercel/Netlify.
